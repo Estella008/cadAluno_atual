@@ -1,0 +1,197 @@
+================================================================================
+            GUIA COMPLETO - DBEAVER PASSO A PASSO
+            Como conectar e criar as tabelas
+================================================================================
+
+PASSO 1: ABRIR O DBEAVER
+------------------------
+1. Abra o programa DBeaver
+2. Se for a primeira vez, ele vai pedir para criar um workspace (pode aceitar o padrão)
+
+PASSO 2: CRIAR NOVA CONEXÃO
+---------------------------
+1. Clique no botão "+" (New Database Connection) no canto superior esquerdo
+   OU
+   Clique com o botão direito em "Database Connections" > New Database Connection
+
+2. Uma janela vai abrir com vários tipos de banco de dados
+
+3. Procure por "PostgreSQL" na lista
+   - Pode digitar "postgres" na busca para encontrar mais rápido
+   - Clique em "PostgreSQL" 
+   - Clique em "Next >"
+
+PASSO 3: CONFIGURAR A CONEXÃO
+------------------------------
+Na janela que abriu, preencha os campos:
+
+Main (Aba Principal):
+  - Host: 200.18.128.54
+  - Port: 5432
+  - Database: aula
+  - Username: aula
+  - Password: aula
+  - [x] Save password (marque esta opção para não precisar digitar sempre)
+
+IMPORTANTE:
+- Não mude a porta (deixe 5432)
+- Não mude o Database (deixe "aula")
+- Username e Password são ambos "aula" (minúsculas)
+
+PASSO 4: TESTAR A CONEXÃO
+-------------------------
+1. Clique no botão "Test Connection..." na parte inferior
+2. Se aparecer uma mensagem pedindo para baixar o driver:
+   - Clique em "Download" 
+   - Aguarde o download terminar
+   - Clique em "Test Connection" novamente
+3. Se aparecer "Connected" em verde = SUCESSO! ✓
+4. Se aparecer erro, veja a seção "PROBLEMAS COMUNS" mais abaixo
+5. Clique em "Finish" para salvar a conexão
+
+PASSO 5: ABRIR O SCRIPT SQL
+---------------------------
+1. No DBeaver, você vai ver sua conexão na lista à esquerda
+2. Clique com o botão direito no nome da conexão (ex: "PostgreSQL - aula")
+3. Clique em "SQL Editor" > "Open SQL Script"
+   OU
+   Clique com o botão direito na conexão > "SQL Editor" > "New SQL Script"
+
+4. Uma nova aba vai abrir no meio da tela
+
+PASSO 6: COLAR O SCRIPT
+-----------------------
+1. Abra o arquivo "script_criacao_tabelas.sql" no Bloco de Notas
+2. Selecione TODO o conteúdo (Ctrl+A)
+3. Copie (Ctrl+C)
+4. Cole no DBeaver na aba SQL que você abriu (Ctrl+V)
+
+PASSO 7: EXECUTAR O SCRIPT
+--------------------------
+1. Verifique se o script está completo no DBeaver
+2. Clique no botão "Execute SQL Script" (ícone de play ▶) na barra de ferramentas
+   OU
+   Pressione Ctrl+Alt+X
+   OU
+   Clique com o botão direito no script > "Execute" > "Execute SQL Script"
+
+3. Aguarde alguns segundos
+4. Se aparecer "Script execution finished successfully" = SUCESSO! ✓
+
+PASSO 8: VERIFICAR SE DEU CERTO
+-------------------------------
+1. No painel esquerdo, expanda sua conexão (clique no + ao lado)
+2. Expanda "Databases"
+3. Expanda "aula"
+4. Expanda "Schemas"
+5. Expanda "estella" (seu schema)
+6. Expanda "Tables"
+
+Você deve ver 3 tabelas:
+  ✓ cantores
+  ✓ albuns
+  ✓ musicas
+
+Se aparecerem essas 3 tabelas = TUDO CERTO! ✓
+
+PASSO 9: TESTAR INSERINDO UM DADO
+----------------------------------
+1. Clique com o botão direito na tabela "cantores"
+2. Clique em "View Data" ou "Generate SQL" > "INSERT"
+3. Ou abra um novo SQL Editor e digite:
+
+INSERT INTO estella.cantores (nome, pais, genero_musical) 
+VALUES ('Beyoncé', 'EUA', 'Pop/R&B');
+
+4. Execute (botão play ▶ ou Ctrl+Enter)
+5. Se aparecer "1 row affected" = FUNCIONOU! ✓
+
+================================================================================
+                        PROBLEMAS COMUNS
+================================================================================
+
+PROBLEMA 1: "Connection refused" ou "Connection timeout"
+SOLUÇÃO:
+- Verifique se está conectado à internet
+- Verifique se o IP está correto: 200.18.128.54
+- Tente fazer ping: Abra o Prompt de Comando e digite: ping 200.18.128.54
+- Se o ping não funcionar, o servidor pode estar offline
+
+PROBLEMA 2: "Authentication failed" ou "password authentication failed"
+SOLUÇÃO:
+- Verifique se o Username está: aula (minúsculas)
+- Verifique se o Password está: aula (minúsculas)
+- Tente desmarcar e marcar novamente "Save password"
+
+PROBLEMA 3: "Database does not exist"
+SOLUÇÃO:
+- Verifique se o Database está: aula (minúsculas)
+- Não coloque espaço antes ou depois
+
+PROBLEMA 4: "Schema 'estella' does not exist" (ao executar o script)
+SOLUÇÃO:
+- Verifique se executou a primeira linha do script: CREATE SCHEMA IF NOT EXISTS estella;
+- Execute o script completo do início ao fim
+- Verifique se não há erros de digitação no script
+
+PROBLEMA 5: "Table already exists"
+SOLUÇÃO:
+- Isso significa que as tabelas já foram criadas antes
+- Está tudo certo! Pode continuar
+- Se quiser recriar, primeiro exclua as tabelas ou o schema
+
+PROBLEMA 6: "Driver not found" ou pede para baixar driver
+SOLUÇÃO:
+- Clique em "Download" quando o DBeaver pedir
+- Aguarde o download terminar
+- Tente conectar novamente
+- Se não baixar automaticamente, vá em Window > Preferences > Drivers > PostgreSQL
+
+PROBLEMA 7: Não consegue executar o script
+SOLUÇÃO:
+- Verifique se selecionou TODA a conexão (não só o database)
+- Clique com o botão direito na CONEXÃO (não no database)
+- Ou use Ctrl+Alt+X para executar o script inteiro
+- Ou selecione todo o texto (Ctrl+A) e pressione Ctrl+Enter
+
+================================================================================
+                        COMANDOS SQL ÚTEIS
+================================================================================
+
+-- Ver se o schema existe
+SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'estella';
+
+-- Ver todas as tabelas do schema estella
+SELECT table_name FROM information_schema.tables WHERE table_schema = 'estella';
+
+-- Ver a estrutura da tabela cantores
+SELECT column_name, data_type FROM information_schema.columns 
+WHERE table_schema = 'estella' AND table_name = 'cantores';
+
+-- Inserir um cantor de teste
+INSERT INTO estella.cantores (nome, pais, genero_musical) 
+VALUES ('Beyoncé', 'EUA', 'Pop/R&B');
+
+-- Ver todos os cantores
+SELECT * FROM estella.cantores;
+
+-- Limpar a tabela (CUIDADO: apaga todos os dados!)
+DELETE FROM estella.cantores;
+
+================================================================================
+                        DICAS IMPORTANTES
+================================================================================
+
+✓ Sempre verifique se está conectado à internet antes de tentar conectar
+✓ O servidor 200.18.128.54 é o servidor de casa - precisa de internet
+✓ Se estiver no laboratório, pode precisar usar 10.90.24.54 (mas você pediu para remover)
+✓ Sempre execute o script completo do início ao fim
+✓ Se der erro, leia a mensagem de erro - ela geralmente diz o que está errado
+✓ Use Ctrl+Enter para executar uma linha ou seleção de SQL
+✓ Use Ctrl+Alt+X para executar o script inteiro
+✓ Sempre verifique se as tabelas foram criadas antes de tentar usar o sistema
+
+================================================================================
+
+
+

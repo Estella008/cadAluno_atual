@@ -1,0 +1,158 @@
+================================================================================
+                    SOLUÇÃO PARA ERRO: schema "estella" does not exist
+================================================================================
+
+ERRO: schema "estella" does not exist
+Este erro acontece quando o schema não foi criado antes das tabelas.
+
+SOLUÇÃO RÁPIDA (2 opções):
+--------------------------
+
+OPÇÃO 1: EXECUTAR PASSO A PASSO (RECOMENDADO)
+---------------------------------------------
+1. No DBeaver, abra um SQL Editor
+2. Execute PRIMEIRO apenas esta linha:
+
+   CREATE SCHEMA IF NOT EXISTS estella;
+
+3. Aguarde aparecer "SQL execution finished successfully"
+4. DEPOIS execute o resto do script (as tabelas)
+
+OPÇÃO 2: EXECUTAR TUDO DE UMA VEZ (SCRIPT CORRIGIDO)
+----------------------------------------------------
+1. Use o arquivo: SCRIPT_CORRIGIDO_DBEAVER.sql
+2. Copie e cole TUDO no DBeaver
+3. Execute (Ctrl+Alt+X ou botão Play)
+4. Deve funcionar agora!
+
+OPÇÃO 3: VERIFICAR SE O SCHEMA JÁ EXISTE
+-----------------------------------------
+Execute esta query no DBeaver:
+
+   SELECT schema_name FROM information_schema.schemata 
+   WHERE schema_name = 'estella';
+
+Se retornar vazio = schema não existe (precisa criar)
+Se retornar "estella" = schema existe (pode ser outro problema)
+
+OPÇÃO 4: CRIAR SCHEMA MANUALMENTE
+----------------------------------
+1. No DBeaver, expanda: Databases > aula > Schemas
+2. Clique com botão direito em "Schemas"
+3. Clique em "Create New Schema"
+4. Nome: estella
+5. Clique em OK
+6. Depois execute o script das tabelas
+
+================================================================================
+                        PASSO A PASSO DETALHADO
+================================================================================
+
+PASSO 1: ABRIR SQL EDITOR
+-------------------------
+1. No DBeaver, clique com botão direito na sua conexão
+2. Clique em "SQL Editor" > "New SQL Script"
+3. Uma nova aba vai abrir
+
+PASSO 2: CRIAR O SCHEMA PRIMEIRO
+--------------------------------
+1. Digite ou cole esta linha:
+
+   CREATE SCHEMA IF NOT EXISTS estella;
+
+2. Selecione apenas essa linha (clique e arraste)
+3. Pressione Ctrl+Enter (executa apenas a linha selecionada)
+   OU
+   Clique no botão Play (▶)
+4. Aguarde aparecer "SQL execution finished successfully"
+
+PASSO 3: VERIFICAR SE O SCHEMA FOI CRIADO
+-----------------------------------------
+1. No painel esquerdo, expanda:
+   - Databases
+   - aula
+   - Schemas
+2. Você deve ver "estella" na lista
+3. Se não aparecer, atualize (F5) ou recarregue
+
+PASSO 4: CRIAR AS TABELAS
+-------------------------
+1. Agora cole e execute este script:
+
+   CREATE TABLE IF NOT EXISTS estella.cantores (
+       id SERIAL PRIMARY KEY,
+       nome VARCHAR(100) NOT NULL,
+       pais VARCHAR(50),
+       genero_musical VARCHAR(50)
+   );
+
+   CREATE TABLE IF NOT EXISTS estella.albuns (
+       id SERIAL PRIMARY KEY,
+       titulo VARCHAR(200) NOT NULL,
+       ano_lancamento INTEGER,
+       cantor_id INTEGER REFERENCES estella.cantores(id) ON DELETE CASCADE
+   );
+
+   CREATE TABLE IF NOT EXISTS estella.musicas (
+       id SERIAL PRIMARY KEY,
+       titulo VARCHAR(200) NOT NULL,
+       duracao TIME,
+       album_id INTEGER REFERENCES estella.albuns(id) ON DELETE CASCADE
+   );
+
+2. Execute tudo (Ctrl+Alt+X ou botão Play)
+
+PASSO 5: VERIFICAR SE AS TABELAS FORAM CRIADAS
+----------------------------------------------
+1. No painel esquerdo, expanda:
+   - Databases > aula > Schemas > estella > Tables
+2. Você deve ver 3 tabelas:
+   ✓ cantores
+   ✓ albuns
+   ✓ musicas
+
+================================================================================
+                        COMANDOS ÚTEIS
+================================================================================
+
+-- Criar schema (execute primeiro)
+CREATE SCHEMA IF NOT EXISTS estella;
+
+-- Verificar se schema existe
+SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'estella';
+
+-- Ver todas as tabelas do schema
+SELECT table_name FROM information_schema.tables WHERE table_schema = 'estella';
+
+-- Deletar schema (CUIDADO: apaga tudo!)
+DROP SCHEMA IF EXISTS estella CASCADE;
+
+-- Criar schema novamente (se deletou)
+CREATE SCHEMA estella;
+
+================================================================================
+                        PROBLEMAS COMUNS
+================================================================================
+
+PROBLEMA: "schema estella does not exist"
+SOLUÇÃO: Execute CREATE SCHEMA primeiro (veja PASSO 2 acima)
+
+PROBLEMA: "permission denied for schema estella"
+SOLUÇÃO: Verifique se o usuário "aula" tem permissão. Tente:
+   GRANT ALL ON SCHEMA estella TO aula;
+
+PROBLEMA: Script não executa tudo de uma vez
+SOLUÇÃO: Execute passo a passo:
+   1. Primeiro CREATE SCHEMA
+   2. Depois CREATE TABLE (uma por vez ou todas juntas)
+
+PROBLEMA: Schema existe mas não aparece no DBeaver
+SOLUÇÃO: 
+   - Atualize (F5) ou recarregue a conexão
+   - Feche e abra o DBeaver
+   - Reconecte na conexão
+
+================================================================================
+
+
+

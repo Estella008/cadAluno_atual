@@ -1,0 +1,102 @@
+================================================================================
+        ERRO: SQLite ao invés de PostgreSQL - CORRIGIR CONEXÃO
+================================================================================
+
+ERRO: [SQLITE_ERROR] SQL error or missing database
+Isso significa que o DBeaver está usando SQLite ao invés de PostgreSQL!
+
+PROBLEMA:
+O DBeaver criou uma conexão SQLite ao invés de PostgreSQL.
+
+SOLUÇÃO: RECRIAR A CONEXÃO CORRETA
+-----------------------------------
+
+PASSO 1: DELETAR A CONEXÃO ERRADA
+----------------------------------
+1. No DBeaver, veja a lista de conexões no painel esquerdo
+2. Se tiver uma conexão com nome tipo "SQLite" ou que não seja PostgreSQL
+3. Clique com botão direito nela
+4. Clique em "Delete" (ou "Remove")
+5. Confirme a exclusão
+
+PASSO 2: CRIAR NOVA CONEXÃO PostgreSQL (CORRETA)
+-------------------------------------------------
+1. Clique no botão "+" (New Database Connection) no canto superior esquerdo
+2. Na janela que abrir, PROCURE por "PostgreSQL" na lista
+   - Pode digitar "postgres" na busca para encontrar
+   - NÃO escolha SQLite!
+   - NÃO escolha MySQL!
+   - ESCOLHA PostgreSQL!
+3. Clique em "PostgreSQL"
+4. Clique em "Next >"
+
+PASSO 3: CONFIGURAR A CONEXÃO PostgreSQL
+-----------------------------------------
+Na janela "Connection settings", preencha:
+
+Aba "Main":
+  - Host: 200.18.128.54
+  - Port: 5432
+  - Database: aula
+  - Username: aula
+  - Password: aula
+  - [x] Save password
+
+IMPORTANTE:
+- Host deve ser: 200.18.128.54
+- Port deve ser: 5432
+- Database deve ser: aula (não postgres, não estella)
+- Username: aula
+- Password: aula
+
+PASSO 4: TESTAR A CONEXÃO
+-------------------------
+1. Clique no botão "Test Connection..." na parte inferior
+2. Se aparecer mensagem pedindo para baixar o driver PostgreSQL:
+   - Clique em "Download"
+   - Aguarde o download terminar
+   - Clique em "Test Connection" novamente
+3. Deve aparecer "Connected" em verde = SUCESSO! ✓
+4. Clique em "Finish"
+
+PASSO 5: VERIFICAR SE É POSTGRESQL
+----------------------------------
+1. No painel esquerdo, você deve ver sua conexão
+2. O nome deve ser algo como "PostgreSQL - aula" ou similar
+3. NÃO deve ter "SQLite" no nome!
+4. Clique com botão direito na conexão
+5. Clique em "Edit Connection"
+6. Veja no topo da janela - deve dizer "PostgreSQL"
+7. Se não dizer PostgreSQL, você criou a conexão errada!
+
+================================================================================
+                        COMO SABER SE ESTÁ CORRETO
+================================================================================
+
+SINAIS DE QUE ESTÁ CORRETO (PostgreSQL):
+- Nome da conexão tem "PostgreSQL" ou "Postgres"
+- Ao clicar em "Edit Connection", o tipo é "PostgreSQL"
+- Port é 5432
+- Host é 200.18.128.54
+
+SINAIS DE QUE ESTÁ ERRADO:
+- Nome da conexão tem "SQLite"
+- Ao clicar em "Edit Connection", o tipo é "SQLite" ou outro
+- Port é diferente de 5432
+- Não pede Host (SQLite usa arquivo local)
+
+================================================================================
+                        DEPOIS DE CONECTAR CORRETAMENTE
+================================================================================
+
+1. Abra um SQL Editor
+2. Execute primeiro:
+
+   CREATE SCHEMA IF NOT EXISTS estella;
+
+3. Depois execute as tabelas (script_criacao_tabelas.sql)
+
+================================================================================
+
+
+

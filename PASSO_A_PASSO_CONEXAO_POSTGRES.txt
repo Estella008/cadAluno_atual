@@ -1,0 +1,115 @@
+================================================================================
+    PASSO A PASSO - CRIAR CONEXÃO POSTGRESQL CORRETA NO DBEAVER
+================================================================================
+
+⚠️ IMPORTANTE: Você precisa criar uma conexão POSTGRESQL, não SQLite!
+
+PASSO 1: ABRIR JANELA DE NOVA CONEXÃO
+-------------------------------------
+1. Abra o DBeaver
+2. Clique no botão "+" (ícone de mais) no canto superior esquerdo
+   OU
+   Menu: Database > New Database Connection
+   OU
+   Clique com botão direito em "Database Connections" > New Database Connection
+
+PASSO 2: ESCOLHER POSTGRESQL (MUITO IMPORTANTE!)
+------------------------------------------------
+1. Uma janela vai abrir com vários ícones de bancos de dados
+2. PROCURE por "PostgreSQL" na lista
+   - Pode ter um ícone de elefante 🐘
+   - Ou procure na lista alfabética
+3. DIGITE "postgres" na busca (caixa de busca no topo)
+4. Quando aparecer "PostgreSQL", CLIQUE NELE
+5. NÃO ESCOLHA:
+   ❌ SQLite
+   ❌ MySQL
+   ❌ SQL Server
+   ❌ Oracle
+6. ESCOLHA:
+   ✅ PostgreSQL
+7. Clique em "Next >" ou "Next"
+
+PASSO 3: PREENCHER DADOS DA CONEXÃO
+-----------------------------------
+Na janela "Connection settings", aba "Main":
+
+Campo "Host":
+  Digite: 200.18.128.54
+
+Campo "Port":
+  Digite: 5432
+  (Não mude este número!)
+
+Campo "Database":
+  Digite: aula
+  (Deve ser "aula", não "postgres", não "estella")
+
+Campo "Username":
+  Digite: aula
+
+Campo "Password":
+  Digite: aula
+  (Marque a opção "Save password" para não precisar digitar sempre)
+
+PASSO 4: TESTAR CONEXÃO
+-----------------------
+1. Clique no botão "Test Connection..." na parte inferior da janela
+2. Se aparecer uma mensagem pedindo para baixar o driver:
+   - Clique em "Download"
+   - Aguarde o download terminar (pode demorar um pouco)
+   - Clique em "Test Connection" novamente
+3. Se aparecer "Connected" ou "Connection test successful" em verde:
+   ✅ SUCESSO! A conexão está correta!
+4. Se aparecer erro:
+   - Veja a mensagem de erro
+   - Verifique se os dados estão corretos
+   - Verifique sua conexão com internet
+
+PASSO 5: SALVAR CONEXÃO
+-----------------------
+1. Se o teste funcionou, clique em "Finish"
+2. A conexão será salva
+3. Você verá a conexão no painel esquerdo do DBeaver
+4. O nome deve ser algo como "PostgreSQL - aula" ou similar
+
+PASSO 6: VERIFICAR SE ESTÁ CORRETO
+----------------------------------
+1. No painel esquerdo, veja sua conexão
+2. Clique com botão direito nela
+3. Clique em "Edit Connection"
+4. Veja no topo da janela - deve dizer "PostgreSQL"
+5. Se não dizer PostgreSQL, você criou a conexão errada!
+6. Feche a janela (Cancel)
+
+================================================================================
+                        VERIFICAÇÃO FINAL
+================================================================================
+
+Execute esta query no DBeaver para confirmar:
+
+SELECT version();
+
+Se retornar algo com "PostgreSQL" = CORRETO! ✅
+Se der erro ou retornar algo diferente = ERRADO! ❌
+
+================================================================================
+                        ERROS COMUNS
+================================================================================
+
+ERRO: "Driver not found"
+SOLUÇÃO: Clique em "Download" quando o DBeaver pedir
+
+ERRO: "Connection refused"
+SOLUÇÃO: Verifique se está conectado à internet
+
+ERRO: "Authentication failed"
+SOLUÇÃO: Verifique se username e password estão corretos (ambos "aula")
+
+ERRO: Ainda aparece SQLite
+SOLUÇÃO: Você criou a conexão errada. Delete e crie novamente escolhendo PostgreSQL
+
+================================================================================
+
+
+

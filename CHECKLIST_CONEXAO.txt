@@ -1,0 +1,121 @@
+================================================================================
+                    CHECKLIST - RESOLVER ERRO "No active connection"
+================================================================================
+
+ERRO: "No active connection"
+Este erro significa que o sistema não consegue conectar ao banco de dados.
+
+PASSO A PASSO PARA RESOLVER:
+----------------------------
+
+1. VERIFICAR SE O BANCO DE DADOS ESTÁ ACESSÍVEL
+   ✓ Abra o DBeaver
+   ✓ Tente conectar manualmente:
+     - Host: 10.90.24.54 (laboratório) OU 200.18.128.54 (casa)
+     - Database: aula
+     - Username: aula
+     - Password: aula
+     - Port: 5432
+   
+   Se não conseguir conectar:
+   - Verifique sua conexão de internet
+   - Verifique se está no laboratório ou em casa
+   - Teste ping: ping 10.90.24.54 (no Prompt de Comando)
+
+2. VERIFICAR SE O SCHEMA FOI CRIADO
+   ✓ No DBeaver, execute:
+     SELECT schema_name FROM information_schema.schemata 
+     WHERE schema_name = 'estella';
+   
+   Se não existir:
+   - Execute o script: script_criacao_tabelas.sql
+   - Verifique se substituiu "seu_usuario" por "estella" (já feito)
+
+3. VERIFICAR SE AS TABELAS FORAM CRIADAS
+   ✓ No DBeaver, execute:
+     SELECT table_name 
+     FROM information_schema.tables 
+     WHERE table_schema = 'estella';
+   
+   Deve retornar:
+   - cantores
+   - albuns
+   - musicas
+   
+   Se não existirem:
+   - Execute o script: script_criacao_tabelas.sql completo
+
+4. VERIFICAR O CÓDIGO JAVA
+   ✓ Abra: src/main/java/com/mycompany/cadastro/banco/ServicosMusica.java
+   ✓ Verifique linha 26: private static final String SCHEMA = "estella";
+   ✓ Deve estar como "estella" (já configurado)
+
+5. VERIFICAR LOGS DO SERVIDOR
+   ✓ Ao executar o projeto, veja o console do NetBeans
+   ✓ Procure por mensagens como:
+     - "Conectado ao servidor do laboratório..."
+     - "ERRO: Não foi possível estabelecer conexão..."
+     - "ERRO: O schema 'estella' ou a tabela 'cantores' não existe!"
+
+6. TESTAR A CONEXÃO MANUALMENTE
+   ✓ No DBeaver, execute:
+     INSERT INTO estella.cantores (nome, pais, genero_musical) 
+     VALUES ('Teste', 'Brasil', 'Pop');
+   
+   Se funcionar, o banco está OK e o problema é no código Java.
+
+SOLUÇÕES COMUNS:
+---------------
+
+PROBLEMA: "Schema 'estella' does not exist"
+SOLUÇÃO: Execute o script SQL para criar o schema
+
+PROBLEMA: "Table 'estella.cantores' does not exist"
+SOLUÇÃO: Execute o script SQL para criar as tabelas
+
+PROBLEMA: "Connection refused" ou "No route to host"
+SOLUÇÃO: 
+- Verifique se está conectado à internet
+- Verifique se está no laboratório (use 10.90.24.54)
+- Verifique se está em casa (use 200.18.128.54)
+- Verifique firewall/antivírus
+
+PROBLEMA: "Driver not found"
+SOLUÇÃO: 
+- Verifique se o pom.xml tem a dependência do PostgreSQL
+- Faça Clean and Build do projeto
+- Reinicie o servidor
+
+PROBLEMA: "Access denied" ou "Authentication failed"
+SOLUÇÃO:
+- Verifique usuário: aula
+- Verifique senha: aula
+- Verifique se o usuário tem permissão no schema 'estella'
+
+COMANDOS SQL ÚTEIS:
+------------------
+
+-- Criar schema (se não existir)
+CREATE SCHEMA IF NOT EXISTS estella;
+
+-- Verificar se schema existe
+SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'estella';
+
+-- Verificar tabelas
+SELECT table_name FROM information_schema.tables WHERE table_schema = 'estella';
+
+-- Verificar estrutura da tabela
+SELECT column_name, data_type FROM information_schema.columns 
+WHERE table_schema = 'estella' AND table_name = 'cantores';
+
+-- Testar inserção
+INSERT INTO estella.cantores (nome, pais, genero_musical) 
+VALUES ('Teste', 'Brasil', 'Pop');
+
+-- Ver dados inseridos
+SELECT * FROM estella.cantores;
+
+================================================================================
+
+
+

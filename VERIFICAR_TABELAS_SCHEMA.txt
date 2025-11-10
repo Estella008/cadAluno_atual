@@ -1,0 +1,162 @@
+================================================================================
+        VERIFICAR ONDE AS TABELAS FORAM CRIADAS
+================================================================================
+
+PROBLEMA: Aparecem muitas tabelas, mas não são cantores, albuns, musicas
+
+SOLUÇÃO: Verificar se as tabelas estão no schema "estella"
+
+================================================================================
+                        PASSO A PASSO
+================================================================================
+
+PASSO 1: VERIFICAR QUAIS SCHEMAS EXISTEM
+----------------------------------------
+1. No DBeaver, expanda sua conexão
+2. Expanda "Databases" > "aula" > "Schemas"
+3. Você deve ver vários schemas, por exemplo:
+   - information_schema
+   - pg_catalog
+   - public
+   - estella (se foi criado)
+   - outros...
+
+PASSO 2: VERIFICAR SE O SCHEMA "estella" EXISTE
+------------------------------------------------
+1. Procure pelo schema "estella" na lista
+2. Se NÃO aparecer "estella":
+   - Você precisa criar o schema primeiro
+   - Veja PASSO 3 abaixo
+3. Se aparecer "estella":
+   - Expanda o schema "estella"
+   - Veja se tem a pasta "Tables"
+   - Expanda "Tables"
+   - Você deve ver: cantores, albuns, musicas
+   - Se não aparecerem, veja PASSO 4
+
+PASSO 3: CRIAR O SCHEMA "estella" (SE NÃO EXISTIR)
+---------------------------------------------------
+1. Abra um SQL Editor no DBeaver
+2. Execute:
+
+   CREATE SCHEMA IF NOT EXISTS estella;
+
+3. Atualize a lista de schemas (F5 ou clique direito > Refresh)
+4. Agora deve aparecer o schema "estella"
+
+PASSO 4: CRIAR AS TABELAS NO SCHEMA CORRETO
+-------------------------------------------
+1. Abra um SQL Editor
+2. Execute este script COMPLETO:
+
+   -- Criar schema (se não existir)
+   CREATE SCHEMA IF NOT EXISTS estella;
+
+   -- Criar tabela de cantores
+   CREATE TABLE IF NOT EXISTS estella.cantores (
+       id SERIAL PRIMARY KEY,
+       nome VARCHAR(100) NOT NULL,
+       pais VARCHAR(50),
+       genero_musical VARCHAR(50)
+   );
+
+   -- Criar tabela de álbuns
+   CREATE TABLE IF NOT EXISTS estella.albuns (
+       id SERIAL PRIMARY KEY,
+       titulo VARCHAR(200) NOT NULL,
+       ano_lancamento INTEGER,
+       cantor_id INTEGER REFERENCES estella.cantores(id) ON DELETE CASCADE
+   );
+
+   -- Criar tabela de músicas
+   CREATE TABLE IF NOT EXISTS estella.musicas (
+       id SERIAL PRIMARY KEY,
+       titulo VARCHAR(200) NOT NULL,
+       duracao TIME,
+       album_id INTEGER REFERENCES estella.albuns(id) ON DELETE CASCADE
+   );
+
+3. Execute o script (Ctrl+Alt+X ou botão Play)
+4. Deve aparecer "Script execution finished successfully"
+
+PASSO 5: VERIFICAR SE AS TABELAS FORAM CRIADAS
+----------------------------------------------
+1. No painel esquerdo, expanda:
+   - Databases > aula > Schemas > estella > Tables
+2. Você deve ver APENAS 3 tabelas:
+   ✓ cantores
+   ✓ albuns
+   ✓ musicas
+3. Se aparecerem outras tabelas, você está olhando o schema errado!
+
+PASSO 6: VERIFICAR QUAL SCHEMA ESTÁ SENDO USADO
+-----------------------------------------------
+Execute esta query no DBeaver:
+
+   SELECT table_name 
+   FROM information_schema.tables 
+   WHERE table_schema = 'estella';
+
+Deve retornar apenas 3 linhas:
+- cantores
+- albuns
+- musicas
+
+Se retornar outras coisas ou vazio, as tabelas não estão no schema "estella"
+
+================================================================================
+                        PROBLEMAS COMUNS
+================================================================================
+
+PROBLEMA: Vejo muitas tabelas no schema "public"
+SOLUÇÃO: 
+- As tabelas que você vê são do schema "public" (padrão)
+- Você precisa olhar no schema "estella"
+- Expanda: Schemas > estella > Tables
+
+PROBLEMA: Não vejo o schema "estella"
+SOLUÇÃO:
+- Execute: CREATE SCHEMA IF NOT EXISTS estella;
+- Atualize a lista (F5)
+- Expanda o schema "estella"
+
+PROBLEMA: Vejo tabelas mas não são cantores, albuns, musicas
+SOLUÇÃO:
+- Você está olhando o schema errado
+- Olhe em: Schemas > estella > Tables
+- Não olhe em: Schemas > public > Tables
+
+PROBLEMA: As tabelas foram criadas no schema "public"
+SOLUÇÃO:
+- Se você criou as tabelas sem o prefixo "estella.", elas foram criadas no "public"
+- Você precisa:
+  1. Criar o schema "estella"
+  2. Criar as tabelas COM o prefixo "estella." (estella.cantores, etc.)
+  OU
+  3. Mover as tabelas para o schema "estella" (mais complicado)
+
+================================================================================
+                        QUERY PARA VERIFICAR
+================================================================================
+
+-- Ver todos os schemas
+SELECT schema_name FROM information_schema.schemata 
+WHERE schema_name NOT IN ('information_schema', 'pg_catalog', 'pg_toast')
+ORDER BY schema_name;
+
+-- Ver tabelas do schema "estella"
+SELECT table_name 
+FROM information_schema.tables 
+WHERE table_schema = 'estella'
+ORDER BY table_name;
+
+-- Ver tabelas do schema "public" (não é o que queremos)
+SELECT table_name 
+FROM information_schema.tables 
+WHERE table_schema = 'public'
+ORDER BY table_name;
+
+================================================================================
+
+
+

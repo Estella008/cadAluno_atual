@@ -1,0 +1,81 @@
+================================================================================
+        SCHEMA ALTERADO: estella → estella_musica
+================================================================================
+
+✅ MUDANÇA REALIZADA:
+O schema foi alterado de "estella" para "estella_musica" para evitar conflitos.
+
+O QUE FOI ALTERADO:
+-------------------
+1. ✅ Código Java (ServicosMusica.java) - linha 26
+2. ✅ Script SQL (script_criacao_tabelas.sql)
+3. ✅ README.txt
+4. ✅ Novo script: SCRIPT_SCHEMA_ESTELLA_MUSICA.sql
+
+PRÓXIMOS PASSOS:
+---------------
+
+1. NO DBEAVER - EXECUTAR O SCRIPT:
+   ---------------------------------
+   a) Abra o DBeaver
+   b) Abra um SQL Editor
+   c) Execute o arquivo: SCRIPT_SCHEMA_ESTELLA_MUSICA.sql
+   d) Ou copie e cole este script:
+
+   CREATE SCHEMA IF NOT EXISTS estella_musica;
+
+   CREATE TABLE IF NOT EXISTS estella_musica.cantores (
+       id SERIAL PRIMARY KEY,
+       nome VARCHAR(100) NOT NULL,
+       pais VARCHAR(50),
+       genero_musical VARCHAR(50)
+   );
+
+   CREATE TABLE IF NOT EXISTS estella_musica.albuns (
+       id SERIAL PRIMARY KEY,
+       titulo VARCHAR(200) NOT NULL,
+       ano_lancamento INTEGER,
+       cantor_id INTEGER REFERENCES estella_musica.cantores(id) ON DELETE CASCADE
+   );
+
+   CREATE TABLE IF NOT EXISTS estella_musica.musicas (
+       id SERIAL PRIMARY KEY,
+       titulo VARCHAR(200) NOT NULL,
+       duracao TIME,
+       album_id INTEGER REFERENCES estella_musica.albuns(id) ON DELETE CASCADE
+   );
+
+2. VERIFICAR SE CRIOU CORRETAMENTE:
+   ---------------------------------
+   No DBeaver, expanda:
+   - Databases > aula > Schemas > estella_musica > Tables
+   
+   Você deve ver 3 tabelas:
+   ✓ cantores
+   ✓ albuns
+   ✓ musicas
+
+3. COMPILAR O PROJETO:
+   --------------------
+   a) Abra o NetBeans
+   b) Faça Clean and Build do projeto
+   c) Execute o projeto
+   d) Teste a aplicação
+
+VERIFICAÇÃO:
+-----------
+Execute esta query no DBeaver para confirmar:
+
+SELECT table_name 
+FROM information_schema.tables 
+WHERE table_schema = 'estella_musica';
+
+Deve retornar 3 tabelas:
+- cantores
+- albuns
+- musicas
+
+================================================================================
+
+
+

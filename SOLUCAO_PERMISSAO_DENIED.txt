@@ -1,0 +1,148 @@
+================================================================================
+            SOLUÇÃO: permission denied for database postgres
+================================================================================
+
+ERRO: permission denied for database postgres
+Este erro acontece quando você não tem permissão para criar schemas.
+
+CAUSA:
+- Você está conectado no banco errado (postgres ao invés de aula)
+- Ou o usuário "aula" não tem permissão para criar schemas
+
+SOLUÇÃO 1: VERIFICAR SE ESTÁ NO BANCO CORRETO (MAIS COMUM)
+-----------------------------------------------------------
+1. No DBeaver, verifique qual banco está selecionado
+2. Você deve estar conectado no banco "aula", NÃO no "postgres"
+3. Se estiver no "postgres", mude para "aula":
+   - Clique com botão direito na conexão
+   - Clique em "Edit Connection"
+   - Na aba "Main", verifique o campo "Database"
+   - Deve estar: aula (não postgres)
+   - Clique em "Test Connection"
+   - Clique em "Finish"
+
+SOLUÇÃO 2: CRIAR SCHEMA NO BANCO CORRETO
+-----------------------------------------
+1. No DBeaver, certifique-se de estar usando o banco "aula"
+2. Execute este comando:
+
+   CREATE SCHEMA IF NOT EXISTS estella;
+
+3. Se der erro de permissão, tente a Solução 3
+
+SOLUÇÃO 3: PEDIR PERMISSÃO AO ADMINISTRADOR
+--------------------------------------------
+Se você não tem permissão para criar schemas, pode ser que precise:
+1. Pedir ao administrador do banco para criar o schema
+2. Ou pedir permissão para criar schemas
+
+SOLUÇÃO 4: USAR SCHEMA PÚBLICO (ALTERNATIVA)
+---------------------------------------------
+Se não conseguir criar o schema "estella", você pode usar o schema "public":
+1. Não precisa criar schema
+2. Crie as tabelas diretamente no schema "public"
+3. Mas isso requer mudar o código Java também
+
+SOLUÇÃO 5: VERIFICAR CONEXÃO CORRETA
+-------------------------------------
+1. No DBeaver, clique com botão direito na conexão
+2. Clique em "Edit Connection"
+3. Verifique:
+   - Host: 200.18.128.54
+   - Port: 5432
+   - Database: aula (IMPORTANTE: deve ser "aula", não "postgres")
+   - Username: aula
+   - Password: aula
+4. Clique em "Test Connection"
+5. Se conectar, clique em "Finish"
+
+================================================================================
+                        PASSO A PASSO DETALHADO
+================================================================================
+
+PASSO 1: VERIFICAR CONEXÃO
+--------------------------
+1. No DBeaver, veja qual conexão está ativa (painel esquerdo)
+2. Verifique se o nome da conexão mostra "aula"
+3. Se mostrar "postgres", você está no banco errado!
+
+PASSO 2: EDITAR CONEXÃO
+-----------------------
+1. Clique com botão direito na conexão
+2. Clique em "Edit Connection" (ou "Edit")
+3. Na aba "Main", verifique o campo "Database"
+4. Se estiver "postgres", mude para "aula"
+5. Clique em "Test Connection"
+6. Deve aparecer "Connected"
+7. Clique em "Finish"
+
+PASSO 3: CRIAR SCHEMA NO BANCO CORRETO
+--------------------------------------
+1. Abra um SQL Editor (clique com botão direito na conexão > SQL Editor)
+2. Certifique-se de que está no banco "aula" (veja no topo da aba SQL)
+3. Execute:
+
+   CREATE SCHEMA IF NOT EXISTS estella;
+
+4. Se funcionar, continue para criar as tabelas
+
+PASSO 4: SE AINDA DER ERRO
+--------------------------
+Se ainda der erro de permissão:
+1. Tente executar no schema "public" primeiro (só para testar)
+2. Ou peça ajuda ao professor/administrador
+3. Ou use a solução alternativa abaixo
+
+================================================================================
+                        SOLUÇÃO ALTERNATIVA
+================================================================================
+
+Se você NÃO consegue criar o schema "estella", temos duas opções:
+
+OPÇÃO A: Pedir ao administrador criar o schema
+-----------------------------------------------
+Peça ao professor/administrador do banco para executar:
+   CREATE SCHEMA estella;
+   GRANT ALL ON SCHEMA estella TO aula;
+
+OPÇÃO B: Usar schema público (requer mudar código)
+---------------------------------------------------
+1. Crie as tabelas no schema "public" (não precisa criar schema)
+2. Mas você precisaria mudar o código Java:
+   - Em ServicosMusica.java, linha 26, mude de:
+     private static final String SCHEMA = "estella";
+   - Para:
+     private static final String SCHEMA = "public";
+3. Depois crie as tabelas sem o prefixo "estella.":
+   CREATE TABLE cantores (...);
+   CREATE TABLE albuns (...);
+   CREATE TABLE musicas (...);
+
+================================================================================
+                        COMANDOS PARA TESTAR
+================================================================================
+
+-- Ver em qual banco você está conectado
+SELECT current_database();
+
+-- Deve retornar: aula
+
+-- Ver qual usuário está usando
+SELECT current_user;
+
+-- Deve retornar: aula
+
+-- Ver se tem permissão para criar schemas
+SELECT has_schema_privilege('aula', 'aula', 'CREATE');
+
+-- Ver todos os schemas disponíveis
+SELECT schema_name FROM information_schema.schemata;
+
+-- Ver schemas que você tem permissão
+SELECT schema_name FROM information_schema.schemata 
+WHERE schema_name NOT IN ('information_schema', 'pg_catalog');
+
+================================================================================
+
+
+

@@ -1,0 +1,37 @@
+================================================================================
+        VERIFICAR CONEXÃO - Você está no banco correto?
+================================================================================
+
+ERRO: permission denied for database postgres
+Isso significa que você está tentando usar o banco "postgres" ao invés de "aula"
+
+SOLUÇÃO RÁPIDA:
+---------------
+
+1. NO DBEAVER, CLIQUE COM BOTÃO DIREITO NA SUA CONEXÃO
+2. CLIQUE EM "Edit Connection" (ou "Edit")
+3. NA ABA "Main", VERIFIQUE O CAMPO "Database"
+4. DEVE ESTAR: aula
+5. SE ESTIVER "postgres", MUDE PARA: aula
+6. CLIQUE EM "Test Connection"
+7. CLIQUE EM "Finish"
+
+DEPOIS DISSO, TENTE CRIAR O SCHEMA NOVAMENTE:
+
+CREATE SCHEMA IF NOT EXISTS estella;
+
+================================================================================
+                        VERIFICAÇÃO RÁPIDA
+================================================================================
+
+Execute esta query no DBeaver para ver em qual banco você está:
+
+SELECT current_database();
+
+Se retornar "postgres" = VOCÊ ESTÁ NO BANCO ERRADO!
+Se retornar "aula" = Você está no banco correto!
+
+================================================================================
+
+
+
